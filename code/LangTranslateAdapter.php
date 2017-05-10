@@ -48,7 +48,7 @@ class LangTranslateAdapter extends i18nSSLegacyAdapter {
     }
 
     public function getFromCache($namespace, $locale = null) {
-        $namespace = str_replace('.', '_', LangFulltextBooleanFilter::convertForeignToLatin(str_replace(' ', '', $namespace)));
+        $namespace = str_replace(['.', '-'], '_', LangFulltextBooleanFilter::convertForeignToLatin(str_replace(' ', '', $namespace)));
 
         if (! is_null($locale)) {
             $locale = strtoupper(explode('_', $locale)[0]);
@@ -66,7 +66,7 @@ class LangTranslateAdapter extends i18nSSLegacyAdapter {
     }
 
     public function storeToCache($namespace, $value, $locale = null) {
-        $namespace = str_replace('.', '_', LangFulltextBooleanFilter::convertForeignToLatin(str_replace(' ', '', $namespace)));
+        $namespace = str_replace(['.', '-'], '_', LangFulltextBooleanFilter::convertForeignToLatin(str_replace(' ', '', $namespace)));
 
         if (! is_null($locale)) {
             $locale = strtoupper(explode('_', $locale)[0]);
