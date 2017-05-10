@@ -1,0 +1,25 @@
+{
+  "name": "navidonskis/silverstripe-language-editor",
+  "description": "Language editor module for SilverStripe CMS",
+  "license": "BSD-3-Clause",
+  "type": "silverstripe-module",
+  "keywords": [
+    "silverstripe",
+    "language",
+    "editor"
+  ],
+  "homepage": "https://github.com/navidonskis/silverstripe-language-editor",
+  "authors": [
+    {
+      "name": "Donatas Navidonskis",
+      "email": "donatas@navidonskis.com"
+    }
+  ],
+  "require": {
+    "php": "<7",
+    "tractorcow/silverstripe-fluent": "~3.8"
+  },
+  "extra": {
+    "installer-name": "langeditor"
+  }
+}
