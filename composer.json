@@ -16,7 +16,6 @@
     }
   ],
   "require": {
-    "php": "<7",
     "tractorcow/silverstripe-fluent": "~3.8"
   },
   "extra": {
