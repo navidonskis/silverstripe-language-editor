@@ -43,10 +43,19 @@ class LangTranslateAdapter extends i18nSSLegacyAdapter {
         return parent::translate($messageId, $locale);
     }
 
+    /**
+     * @return string
+     */
     public function toString() {
-        return "LangTranslateAdapter";
+        return static::class;
     }
 
+    /**
+     * @param string $namespace
+     * @param string $locale
+     *
+     * @return string|false
+     */
     public function getFromCache($namespace, $locale = null) {
         $namespace = static::filterCacheKey($namespace);
 
@@ -65,6 +74,13 @@ class LangTranslateAdapter extends i18nSSLegacyAdapter {
         return false;
     }
 
+    /**
+     * @param string $namespace
+     * @param string $value
+     * @param string $locale
+     *
+     * @return void
+     */
     public function storeToCache($namespace, $value, $locale = null) {
         $namespace = static::filterCacheKey($namespace);
 
@@ -77,6 +93,11 @@ class LangTranslateAdapter extends i18nSSLegacyAdapter {
         $cache->save($value, $cacheKey);
     }
 
+    /**
+     * @param string $value
+     *
+     * @return string
+     */
     public static function filterCacheKey($value) {
         return strtolower(trim(preg_replace('~[^a-zA-Z0-9_]+~u', '_', LangFulltextBooleanFilter::convertForeignToLatin($value))));
     }
