@@ -48,7 +48,7 @@ class LangTranslateAdapter extends i18nSSLegacyAdapter {
     }
 
     public function getFromCache($namespace, $locale = null) {
-        $namespace = str_replace(['.', '-'], '_', LangFulltextBooleanFilter::convertForeignToLatin(str_replace(' ', '', $namespace)));
+        $namespace = static::filterCacheKey($namespace);
 
         if (! is_null($locale)) {
             $locale = strtoupper(explode('_', $locale)[0]);
@@ -66,7 +66,7 @@ class LangTranslateAdapter extends i18nSSLegacyAdapter {
     }
 
     public function storeToCache($namespace, $value, $locale = null) {
-        $namespace = str_replace(['.', '-'], '_', LangFulltextBooleanFilter::convertForeignToLatin(str_replace(' ', '', $namespace)));
+        $namespace = static::filterCacheKey($namespace);
 
         if (! is_null($locale)) {
             $locale = strtoupper(explode('_', $locale)[0]);
@@ -75,6 +75,10 @@ class LangTranslateAdapter extends i18nSSLegacyAdapter {
         $cacheKey = sprintf('_%s_%s', $namespace, $locale);
         $cache = SS_Cache::factory(LangEditor::class);
         $cache->save($value, $cacheKey);
+    }
+
+    public static function filterCacheKey($value) {
+        return strtolower(trim(preg_replace('~[^a-zA-Z0-9_]+~u', '_', LangFulltextBooleanFilter::convertForeignToLatin($value))));
     }
 
 }
