@@ -6,9 +6,8 @@ Language editor for SilverStripe CMS. It's alternative to [https://github.com/un
 
 ## Collect entities
 
-To collect an entities you need to have installed `phpunit` at vendor directory. Because module using `i18nTextCollector` class which are on top of `phunit` to collect entities. 
-
-If you already have `phpunit` installed run command in cli:
+To collect an entities you need to be have `phpunit` installed. Module using `i18nTextCollector` class which are on top of `phpunit` to collect entities. 
+If you already have `phpunit` run command in cli:
 
 ```shell
 php /your-project/directory/framework/cli-script.php dev/tasks/LangCollectorTask "module=yourModuleName,otherModuleName&merge=true"
@@ -17,7 +16,7 @@ php /your-project/directory/framework/cli-script.php dev/tasks/LangCollectorTask
 or in the browser `example.com/dev/tasks/LangCollectorTask?module=yourModuleName,otherModuleName&merge=true`.
 
 | Parameter | Description | Options | Default |
-|--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------|-------------|
+|--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------|-------------|
 | module | One or more modules to limit collection (comma-separated) | string |  |
 | merge | Merge new strings with existing ones already defined | boolean | false |
 
