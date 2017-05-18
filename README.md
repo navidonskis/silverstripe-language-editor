@@ -1,5 +1,7 @@
 # SilverStripe Language Editor
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/navidonskis/silverstripe-language-editor/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/navidonskis/silverstripe-language-editor/?branch=master)
+
 Language editor for SilverStripe CMS. It's alternative to [https://github.com/unclecheese/LangEditor](https://github.com/unclecheese/LangEditor), but this one collect entities to the database to avoid file writing at the project (and to avoid versioning). All entities with module's store to `LangModule` and `LangEntity`.
 
 ![](assets/images/screenshot.png)
