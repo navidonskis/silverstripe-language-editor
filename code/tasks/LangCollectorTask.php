@@ -10,21 +10,38 @@ class LangCollectorTask extends BuildTask {
 
     protected $title = "Lang Collector Task";
 
-    protected $description = "
-		Parameters:
-		- locale: Sets default locale
-		- module: One or more modules to limit collection (comma-separated)
-		- merge: Merge new strings with existing ones already defined (default: FALSE)
-	";
+    protected $description = "Parameters:
+- module: One or more modules to limit collection (comma-separated)
+- merge: Merge new strings with existing ones already defined (default: FALSE)
+- example: /dev/tasks/LangCollectorTask \"module=mysite,themes/default&merge=true\"
+";
 
-    protected $locale;
-
+    /**
+     * Merge the same created entities if task is running again
+     *
+     * @var bool
+     */
     protected $merge = false;
 
+    /**
+     * Given modules from the user
+     *
+     * @var array
+     */
     protected $module = [];
 
+    /**
+     * Text Collector instance to parse an entities
+     *
+     * @var i18nTextCollector
+     */
     protected $textCollector;
 
+    /**
+     * Initialize within permissions
+     *
+     * @return SS_HTTPResponse
+     */
     public function init() {
         parent::init();
 
@@ -36,8 +53,8 @@ class LangCollectorTask extends BuildTask {
 
     public function run($request) {
         increase_time_limit_to();
-        $definedLocale = Fluent::current_locale();
-        $this->locale = Config::inst()->get('i18n', 'default_locale');
+
+        $this->writeMessage($this->description);
 
         try {
             $this->mergeWith($request->getVars());
@@ -46,15 +63,7 @@ class LangCollectorTask extends BuildTask {
             exit;
         }
 
-        if (count($this->module) > 0) {
-            // set working locale
-            Fluent::set_persist_locale($this->locale);
-
-            $this->runCollector();
-
-            // roll-back locale
-            Fluent::set_persist_locale($definedLocale);
-        }
+        $this->runCollector();
     }
 
     /**
@@ -63,25 +72,27 @@ class LangCollectorTask extends BuildTask {
      * @return void
      */
     protected function runCollector() {
-        $this->textCollector = new i18nTextCollector($this->locale);
+        $this->textCollector = new i18nTextCollector();
 
-        $modules = $this->textCollector->collect($this->module, $this->merge);
+        $modules = @$this->textCollector->collect($this->module, $this->merge);
 
         foreach ($modules as $moduleName => $entities) {
-            if (count($entities) > 0) {
-                // find or create a new module
-                $module = LangModule::findOrCreate($moduleName);
-                $this->writeMessage("Collecting module {$module->Name}");
+            if (count($entities) <= 0) {
+                continue;
+            }
 
-                foreach ($entities as $namespace => $options) {
-                    $value = $options[0];
-                    $title = isset($options[1]) ? $options[1] : '';
+            // find or create a new module
+            $module = LangModule::findOrCreate($moduleName);
+            $this->writeMessage("Collecting module {$module->Name}");
 
-                    $entity = $module->mergeOrAddEntity($namespace, $value, $title, $this->merge);
+            foreach ($entities as $namespace => $options) {
+                $value = $options[0];
+                $title = isset($options[1]) ? $options[1] : '';
 
-                    if ($entity instanceof LangEntity) {
-                        $this->writeMessage("{$namespace} - $value");
-                    }
+                $entity = $module->mergeOrAddEntity($namespace, $value, $title, $this->merge);
+
+                if ($entity instanceof LangEntity) {
+                    $this->writeMessage("{$namespace} - $value");
                 }
             }
         }
@@ -100,7 +111,7 @@ class LangCollectorTask extends BuildTask {
 
     /**
      * Collect parameters from given options array and merge
-     * it with class properties (locale, module).
+     * it with class properties
      *
      * @param array $options
      *
@@ -109,21 +120,11 @@ class LangCollectorTask extends BuildTask {
      * @throws InvalidLocaleException
      */
     protected function mergeWith($options = []) {
-        if (array_key_exists('locale', $options) && ! empty($options['locale'])) {
-            if (! i18n::validate_locale($options['locale'])) {
-                throw new InvalidLocaleException("Given locale \"{$options['locale']}\" is invalid.");
-            }
-
-            $this->locale = $options['locale'];
+        if (! array_key_exists('module', $options) || empty($options['module'])) {
+            throw new EmptyModuleException("Please set one or more (comma-separated) module names");
         }
 
-        if (array_key_exists('module', $options)) {
-            if (empty($options['module'])) {
-                throw new EmptyModuleException("Please set one or more (comma-separated) module names");
-            }
-
-            $this->module = explode(',', $options['module']);
-        }
+        $this->module = explode(',', $options['module']);
 
         if (array_key_exists('merge', $options)) {
             $this->merge = (bool) $options['merge'];
