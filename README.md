@@ -6,7 +6,7 @@ Language editor for SilverStripe CMS. It's alternative to [https://github.com/un
 
 ## Collect entities
 
-To collect an entities you need to be have `phpunit` installed. Module using `i18nTextCollector` class which are on top of `phpunit` to collect entities. 
+To collect an entities you need to have `phpunit` installed. Module using `i18nTextCollector` class which are on top of `phpunit` to collect entities. 
 If you already have `phpunit` run command in cli:
 
 ```shell
