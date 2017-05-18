@@ -1,7 +1,7 @@
 {
-  "name": "gulp-starter",
+  "name": "silverstripe-langeditor",
   "version": "1.0.0",
-  "description": "Gulp starter pack (sass, es6)",
+  "description": "Language editor module for SilverStripe CMS",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -14,7 +14,7 @@
     "ecmascript6"
   ],
   "author": "Donatas Navidonskis <donatas@navidonskis.com>",
-  "license": "MIT",
+  "license": "BSD-3-Clause",
   "devDependencies": {
     "babel-core": "^6.24.0",
     "babel-polyfill": "^6.23.0",
